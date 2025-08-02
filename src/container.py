@@ -7,12 +7,18 @@ from domain.services.atomic_analyzers.sentiment_analyzer_service import Sentimen
 from domain.services.atomic_analyzers.topic_analyzer_service import TopicAnalyzerService
 from domain.services.bubble_map_analyzer_service import BubbleMapAnalyzerService
 
+from infrastructure.driven.llm_emotional_analyzer import LlmEmotionalAnalyzer
 from infrastructure.driving.content_analyzer_adapter import ContentAnalyzerAdapter
 
 from infrastructure.web.bubble_decoder_api import BubbleDecoderAPI
 
 class Container(containers.DeclarativeContainer):
-    emotional_tone_analyzer = providers.Singleton(EmotionalToneAnalyzerService)
+    llm_emotional_analyzer = providers.Singleton(LlmEmotionalAnalyzer)
+    
+    emotional_tone_analyzer = providers.Singleton(
+        EmotionalToneAnalyzerService, 
+        external_emotional_analyzer=llm_emotional_analyzer
+    )
     language_style_analyzer = providers.Singleton(LanguageStyleAnalyzerService)
     polarization_analyzer = providers.Singleton(PolarizationAnalyzerService)
     sentiment_analyzer = providers.Singleton(SentimentAnalyzerService)

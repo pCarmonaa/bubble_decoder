@@ -1,18 +1,22 @@
 [tool.poetry]
-name = "bubble_decoder2"
+name = "bubble_decoder"
 version = "0.1.0"
+package-mode = false
 description = "A project to decode bubbles."
-authors = ["Your Name <you@example.com>"]
+authors = ["Pablo Carmona"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-flask = "3.0.0"
-flask-cors = "4.0.0"
-textblob = "0.17.1"
-nltk = "3.8.1"
-requests = "2.31.0"
+python = "^3.12"
+flask = "^3.0.2"
+flask-cors = "^4.0.0"
+textblob = "^0.17.1"
+nltk = "^3.8.1"
+requests = "^2.31.0"
 dependency-injector = "^4.48.1"
+transformers = "^4.40.1"
+torch = "^2.3.0"
+numpy = "^1.26.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api" 
+build-backend = "poetry.core.masonry.api"
