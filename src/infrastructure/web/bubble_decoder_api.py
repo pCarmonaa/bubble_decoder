@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
+import logging
 from flask_cors import CORS
 from domain.ports.driving.content_analyzer import ContentAnalyzer
 from infrastructure.web.serializers.generic_object_serializer import GenericObjectSerializer
+
+logger = logging.getLogger(__name__)
 
 class BubbleDecoderAPI:
     def __init__(self, content_analyzer: ContentAnalyzer):
@@ -38,6 +41,7 @@ class BubbleDecoderAPI:
             except ValueError as e:
                 return jsonify({'error': str(e)}), 400
             except Exception as e:
+                logger.error(f"Error analyzing bubble map: {e}")
                 return jsonify({'error': 'Internal server error'}), 500
     
     def run(self, debug=True, host='0.0.0.0', port=5000):

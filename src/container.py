@@ -1,5 +1,6 @@
 from dependency_injector import containers, providers
 
+from config import Settings
 from domain.services.atomic_analyzers.emotional_tone_analyzer_service import EmotionalToneAnalyzerService
 from domain.services.atomic_analyzers.language_style_analyzer_service import LanguageStyleAnalyzerService
 from domain.services.atomic_analyzers.polarization_analyzer_service import PolarizationAnalyzerService
@@ -13,6 +14,8 @@ from infrastructure.driving.content_analyzer_adapter import ContentAnalyzerAdapt
 from infrastructure.web.bubble_decoder_api import BubbleDecoderAPI
 
 class Container(containers.DeclarativeContainer):
+    settings = providers.Singleton(Settings)
+    
     llm_emotional_analyzer = providers.Singleton(LlmEmotionalAnalyzer)
     
     emotional_tone_analyzer = providers.Singleton(
