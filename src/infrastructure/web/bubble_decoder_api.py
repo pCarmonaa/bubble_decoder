@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from domain.ports.driving.content_analyzer import ContentAnalyzer
+from infrastructure.web.serializers.generic_object_serializer import GenericObjectSerializer
 
 class BubbleDecoderAPI:
     def __init__(self, content_analyzer: ContentAnalyzer):
@@ -31,7 +32,7 @@ class BubbleDecoderAPI:
                 
                 return jsonify({
                     'success': True,
-                    'analysis': analysis_result
+                    'analysis': GenericObjectSerializer.to_dict(analysis_result)
                 }), 200
                 
             except ValueError as e:

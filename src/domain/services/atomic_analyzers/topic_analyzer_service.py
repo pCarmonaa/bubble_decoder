@@ -1,9 +1,9 @@
-from typing import Dict, Any
 from textblob import TextBlob
 from domain.ports.driving.atomic_analyzers import TopicAnalyzer
+from domain.models.topic_analysis import TopicAnalysis
 
 class TopicAnalyzerService(TopicAnalyzer):
-    def analyze(self, content: str) -> Dict[str, Any]:
+    def analyze(self, content: str) -> TopicAnalysis:
         blob = TextBlob(content.lower())
         words = blob.words
         
@@ -24,8 +24,8 @@ class TopicAnalyzerService(TopicAnalyzer):
         
         primary_topic = max(topic_scores, key=topic_scores.get) if topic_scores else 'general'
         
-        return {
-            'primary_topic': primary_topic,
-            'topic_scores': topic_scores,
-            'confidence': min(1.0, sum(topic_scores.values()) / len(words) * 10)
-        } 
+        return TopicAnalysis(
+            primary_topic=primary_topic,
+            topic_scores=topic_scores,
+            confidence=min(1.0, sum(topic_scores.values()) / len(words) * 10)
+        ) 

@@ -1,7 +1,8 @@
-from typing import Dict, Any
+from typing import Dict
 from domain.ports.driven.external_emotional_analyzer import ExternalEmotionalAnalyzer
 from domain.ports.driving.atomic_analyzers import EmotionalToneAnalyzer
 from domain.models.emotion.emotion_data import EmotionData
+from domain.models.emotion.emotional_analysis import EmotionalAnalysis
 
 class EmotionalToneAnalyzerService(EmotionalToneAnalyzer):
     def __init__(self, external_emotional_analyzer: ExternalEmotionalAnalyzer):
@@ -37,15 +38,15 @@ class EmotionalToneAnalyzerService(EmotionalToneAnalyzer):
             return 'neutral'
         return max(main_emotion_scores.items(), key=lambda x: x[1])[0]
     
-    def analyze(self, content: str) -> Dict[str, Any]:
+    def analyze(self, content: str) -> EmotionalAnalysis:
         emotion_scores = self.external_emotional_analyzer.get_emotional_analysis(content)
                 
         main_emotion_scores = self._calculate_main_emotion_scores(emotion_scores)
         emotional_intensity = self._calculate_emotional_intensity(emotion_scores)
         dominant_emotion = self._determine_dominant_emotion(main_emotion_scores)
 
-        return {
-            'dominant_emotion': dominant_emotion,
-            'emotion_scores': main_emotion_scores,
-            'emotional_intensity': emotional_intensity,
-        } 
+        return EmotionalAnalysis(
+            dominant_emotion=dominant_emotion,
+            emotion_scores=main_emotion_scores,
+            emotional_intensity=emotional_intensity
+        ) 

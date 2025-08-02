@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from typing import Any, Dict
+from domain.models.bubble_map_analysis import BubbleMapAnalysis
 
 class BubbleMapAnalyzer:
     @abstractmethod
-    def analyze(self, content: str) -> Dict[str, Any]:
+    def analyze(self, content: str) -> BubbleMapAnalysis:
         pass

@@ -1,9 +1,9 @@
-from typing import Dict, Any
 from nltk.tokenize import word_tokenize
 from domain.ports.driving.atomic_analyzers import LanguageStyleAnalyzer
+from domain.models.language_style_analysis import LanguageStyleAnalysis
 
 class LanguageStyleAnalyzerService(LanguageStyleAnalyzer):
-    def analyze(self, content: str) -> Dict[str, Any]:
+    def analyze(self, content: str) -> LanguageStyleAnalysis:
         words = word_tokenize(content)
         sentences = content.split('.')
         
@@ -23,10 +23,10 @@ class LanguageStyleAnalyzerService(LanguageStyleAnalyzer):
         else:
             style = 'neutral'
         
-        return {
-            'style': style,
-            'avg_sentence_length': avg_sentence_length,
-            'avg_word_length': avg_word_length,
-            'formal_score': formal_score,
-            'informal_score': informal_score
-        } 
+        return LanguageStyleAnalysis(
+            style=style,
+            avg_sentence_length=avg_sentence_length,
+            avg_word_length=avg_word_length,
+            formal_score=formal_score,
+            informal_score=informal_score
+        ) 

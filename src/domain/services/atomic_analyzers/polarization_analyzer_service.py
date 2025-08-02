@@ -1,8 +1,8 @@
-from typing import Dict, Any
 from domain.ports.driving.atomic_analyzers import PolarizationAnalyzer
+from domain.models.polarization_analysis import PolarizationAnalysis
 
 class PolarizationAnalyzerService(PolarizationAnalyzer):
-    def analyze(self, content: str) -> Dict[str, Any]:
+    def analyze(self, content: str) -> PolarizationAnalysis:
         content_lower = content.lower()
         
         polarizing_indicators = [
@@ -27,9 +27,9 @@ class PolarizationAnalyzerService(PolarizationAnalyzer):
         else:
             level = 'low'
         
-        return {
-            'polarization_level': level,
-            'polarization_score': polarization_level,
-            'absolute_terms_count': absolute_score,
-            'extreme_terms_count': extreme_score
-        } 
+        return PolarizationAnalysis(
+            polarization_level=level,
+            polarization_score=polarization_level,
+            absolute_terms_count=absolute_score,
+            extreme_terms_count=extreme_score
+        ) 

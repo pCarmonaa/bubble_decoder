@@ -1,9 +1,9 @@
-from typing import Dict, Any
 from textblob import TextBlob
 from domain.ports.driving.atomic_analyzers import SentimentAnalyzer
+from domain.models.sentiment_analysis import SentimentAnalysis
 
 class SentimentAnalyzerService(SentimentAnalyzer):
-    def analyze(self, content: str) -> Dict[str, Any]:
+    def analyze(self, content: str) -> SentimentAnalysis:
         blob = TextBlob(content)
         sentiment_score = blob.sentiment.polarity
         
@@ -14,8 +14,8 @@ class SentimentAnalyzerService(SentimentAnalyzer):
         else:
             sentiment = 'neutral'
         
-        return {
-            'sentiment': sentiment,
-            'polarity_score': sentiment_score,
-            'subjectivity': blob.sentiment.subjectivity
-        } 
+        return SentimentAnalysis(
+            sentiment=sentiment,
+            polarity_score=sentiment_score,
+            subjectivity=blob.sentiment.subjectivity
+        ) 
