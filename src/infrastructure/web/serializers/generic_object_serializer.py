@@ -2,6 +2,7 @@ from typing import Any, Dict, Set
 import json
 from datetime import datetime, date
 from decimal import Decimal
+from enum import Enum
 
 
 class GenericObjectSerializer:
@@ -16,6 +17,7 @@ class GenericObjectSerializer:
     - Primitive types
     - Custom objects with __dict__
     - Circular references prevention
+    - Enums
     """
     
     @staticmethod
@@ -39,6 +41,9 @@ class GenericObjectSerializer:
         if isinstance(obj, (str, int, float, bool)):
             return obj
         
+        if isinstance(obj, Enum):
+            return obj.value
+        
         if isinstance(obj, (datetime, date)):
             return obj.isoformat()
         
@@ -53,7 +58,7 @@ class GenericObjectSerializer:
         
         if isinstance(obj, dict):
             return {
-                key: GenericObjectSerializer.to_dict(value, _visited) 
+                GenericObjectSerializer.to_dict(key, _visited): GenericObjectSerializer.to_dict(value, _visited) 
                 for key, value in obj.items()
             }
         

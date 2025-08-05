@@ -5,11 +5,11 @@ from domain.ports.driven.external_emotional_analyzer import ExternalEmotionalAna
 from domain.models.emotion.emotion_data import EmotionData
 
 
-class LlmEmotionalAnalyzer(ExternalEmotionalAnalyzer):
+class LlmEmotionalAnalyzerAdapter(ExternalEmotionalAnalyzer):
     def __init__(self):
-        self.emotion_model_name = "SamLowe/roberta-base-go_emotions"
-        self.emotion_tokenizer = AutoTokenizer.from_pretrained(self.emotion_model_name)
-        self.emotion_model = AutoModelForSequenceClassification.from_pretrained(self.emotion_model_name)
+        emotion_model_name = "SamLowe/roberta-base-go_emotions"
+        self.emotion_tokenizer = AutoTokenizer.from_pretrained(emotion_model_name)
+        self.emotion_model = AutoModelForSequenceClassification.from_pretrained(emotion_model_name)
         
         self.emotion_labels = [emotion for emotions in EmotionData.CATEGORIES.values() for emotion in emotions]
 

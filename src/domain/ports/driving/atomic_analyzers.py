@@ -3,7 +3,7 @@ from abc import abstractmethod
 from domain.models.emotion.emotional_analysis import EmotionalAnalysis
 from domain.models.language_style_analysis import LanguageStyleAnalysis
 from domain.models.polarization_analysis import PolarizationAnalysis
-from domain.models.sentiment_analysis import SentimentAnalysis
+from domain.models.sentiment.sentiment_analysis import SentimentAnalysis
 from domain.models.topic_analysis import TopicAnalysis
 
 class EmotionalToneAnalyzer:

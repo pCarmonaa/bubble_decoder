@@ -4,11 +4,11 @@ from config import Settings
 from domain.services.atomic_analyzers.emotional_tone_analyzer_service import EmotionalToneAnalyzerService
 from domain.services.atomic_analyzers.language_style_analyzer_service import LanguageStyleAnalyzerService
 from domain.services.atomic_analyzers.polarization_analyzer_service import PolarizationAnalyzerService
-from domain.services.atomic_analyzers.sentiment_analyzer_service import SentimentAnalyzerService
 from domain.services.atomic_analyzers.topic_analyzer_service import TopicAnalyzerService
 from domain.services.bubble_map_analyzer_service import BubbleMapAnalyzerService
 
-from infrastructure.driven.llm_emotional_analyzer import LlmEmotionalAnalyzer
+from infrastructure.driven.llm_emotional_analyzer_adapter import LlmEmotionalAnalyzerAdapter
+from infrastructure.driving.llm_sentiment_analyzer_adapter import LlmSentimentAnalyzerAdapter
 from infrastructure.driving.content_analyzer_adapter import ContentAnalyzerAdapter
 
 from infrastructure.web.bubble_decoder_api import BubbleDecoderAPI
@@ -16,7 +16,8 @@ from infrastructure.web.bubble_decoder_api import BubbleDecoderAPI
 class Container(containers.DeclarativeContainer):
     settings = providers.Singleton(Settings)
     
-    llm_emotional_analyzer = providers.Singleton(LlmEmotionalAnalyzer)
+    llm_emotional_analyzer = providers.Singleton(LlmEmotionalAnalyzerAdapter)
+    llm_sentiment_analyzer = providers.Singleton(LlmSentimentAnalyzerAdapter)
     
     emotional_tone_analyzer = providers.Singleton(
         EmotionalToneAnalyzerService, 
@@ -24,7 +25,6 @@ class Container(containers.DeclarativeContainer):
     )
     language_style_analyzer = providers.Singleton(LanguageStyleAnalyzerService)
     polarization_analyzer = providers.Singleton(PolarizationAnalyzerService)
-    sentiment_analyzer = providers.Singleton(SentimentAnalyzerService)
     topic_analyzer = providers.Singleton(TopicAnalyzerService)
     
     bubble_map_analyzer = providers.Singleton(
@@ -32,7 +32,7 @@ class Container(containers.DeclarativeContainer):
         emotional_tone_analyzer=emotional_tone_analyzer,
         language_style_analyzer=language_style_analyzer,
         polarization_analyzer=polarization_analyzer,
-        sentiment_analyzer=sentiment_analyzer,
+        sentiment_analyzer=llm_sentiment_analyzer,
         topic_analyzer=topic_analyzer
     )
     

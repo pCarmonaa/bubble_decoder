@@ -1,3 +1,4 @@
+from domain.models.sentiment.sentiment import Sentiment
 from domain.ports.driving.atomic_analyzers import (
     EmotionalToneAnalyzer,
     LanguageStyleAnalyzer,
@@ -9,7 +10,7 @@ from domain.ports.driving.bubble_map_analyzer import BubbleMapAnalyzer
 from domain.models.emotion.emotional_analysis import EmotionalAnalysis
 from domain.models.language_style_analysis import LanguageStyleAnalysis
 from domain.models.polarization_analysis import PolarizationAnalysis
-from domain.models.sentiment_analysis import SentimentAnalysis
+from domain.models.sentiment.sentiment_analysis import SentimentAnalysis
 from domain.models.topic_analysis import TopicAnalysis
 from domain.models.bubble_map_analysis import BubbleMapAnalysis, ContentAnalysis, BubbleRiskAssessment
 
@@ -54,7 +55,6 @@ class BubbleMapAnalyzerService(BubbleMapAnalyzer):
             risk_level=self._determine_risk_level(bubble_risk_score),
             risk_score=bubble_risk_score,
             risk_factors=self._identify_risk_factors(
-                sentiment_analysis,
                 emotional_analysis,
                 language_analysis,
                 polarization_analysis
@@ -70,7 +70,7 @@ class BubbleMapAnalyzerService(BubbleMapAnalyzer):
                                    language_analysis: LanguageStyleAnalysis, polarization_analysis: PolarizationAnalysis) -> float:
         risk_factors = []
         
-        if sentiment_analysis.polarity_score > 0.5 or sentiment_analysis.polarity_score < -0.5:
+        if sentiment_analysis.sentiment == Sentiment.NEGATIVE:
             risk_factors.append(0.2)
         
         if emotional_analysis.emotional_intensity > 0.5:
@@ -92,14 +92,9 @@ class BubbleMapAnalyzerService(BubbleMapAnalyzer):
         else:
             return 'low'
     
-    def _identify_risk_factors(self, sentiment_analysis: SentimentAnalysis, emotional_analysis: EmotionalAnalysis, 
+    def _identify_risk_factors(self, emotional_analysis: EmotionalAnalysis, 
                              language_analysis: LanguageStyleAnalysis, polarization_analysis: PolarizationAnalysis) -> list:
         risk_factors = []
-        
-        if sentiment_analysis.polarity_score > 0.5:
-            risk_factors.append('Strong positive bias')
-        elif sentiment_analysis.polarity_score < -0.5:
-            risk_factors.append('Strong negative bias')
         
         if emotional_analysis.emotional_intensity > 0.5:
             risk_factors.append('High emotional intensity')
